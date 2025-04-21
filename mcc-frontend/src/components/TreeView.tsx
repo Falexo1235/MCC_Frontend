@@ -6,10 +6,14 @@ import type { TreeNode } from "../App"
 interface TreeViewProps {
     data: TreeNode[]
     rootId: string | null
+    selectedNode: string | null
+    setSelectedNode: (id: string | null) => void
 }
 const TreeView = ({
     data,
-    rootId
+    rootId,
+    selectedNode,
+    setSelectedNode
 }: TreeViewProps) => {
     const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set())
 
@@ -29,10 +33,11 @@ const TreeView = ({
         const children = getChildren(node.id)
         const hasChildren= children.length > 0
         const isExpanded = expandedNodes.has(node.id)
+        const isSelected = selectedNode === node.id
         
         return (
             <div key={node.id} className="tree-node-container">
-                <div className="tree-node}">
+                <div className={`tree-node ${isSelected ? "selected" : ""}`} onClick={() => setSelectedNode(node.id)}>
                     {hasChildren  && (
                         <span className="toggle-icon" onClick={() => toggleNode(node.id)}>
                             {isExpanded ? "▼" : "►"}

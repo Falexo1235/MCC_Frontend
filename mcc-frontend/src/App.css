@@ -68,3 +68,14 @@ h2{
 .children-container{
   margin-left: 15px;
 }
+.tree-node{
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.tree-node.selected {
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+}
