@@ -1,0 +1,50 @@
+{
+    "objects": [
+      {
+        "id": "1",
+        "text": "Node 1",
+        "parent": null
+      },
+      {
+        "id": "2",
+        "text": "Node 2",
+        "parent": "1"
+      },
+      {
+        "id": "3",
+        "text": "Node 3",
+        "parent": "1"
+      },
+      {
+        "id": "4",
+        "text": "Node 4",
+        "parent": "2"
+      },
+      {
+        "id": "5",
+        "text": "Node 5",
+        "parent": "2"
+      },
+      {
+        "id": "6",
+        "text": "Node 6",
+        "parent": "4"
+      },
+      {
+        "id": "7",
+        "text": "Node 7",
+        "parent": "4"
+      },
+      {
+        "id": "8",
+        "text": "Node 8",
+        "parent": "6"
+      },
+      {
+        "id": "9",
+        "text": "Node 9",
+        "parent": "8"
+      }
+    ]
+  }
+  
