@@ -14,6 +14,7 @@ const App = () => {
   const [treeData, setTreeData] = useState<TreeNode[]>(initialData.objects)
   const [currentRootId, setCurrentRootId] = useState<string | null>(null)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
+  const [editingNode, setEditingNode] = useState<string | null>(null)
   const handleAdd = () => {
     if (selectedNode) {
       handleAddChild(selectedNode)
@@ -30,7 +31,9 @@ const App = () => {
     setTreeData([...treeData, newNode])
   }
   const handleEdit = () => {
-    
+    if (selectedNode){
+      setEditingNode(selectedNode)
+    }
   }
   const handleRemove = () => {
     if(!selectedNode) { return }
@@ -47,6 +50,7 @@ const App = () => {
     const newTree = treeData.filter((node) => !nodesToRemove.has(node.id))
     setTreeData(newTree)
     setSelectedNode(null)
+    setEditingNode(null)
   }
   const handleReset = () => {
     setTreeData(initialData.objects)
@@ -57,6 +61,20 @@ const App = () => {
     if(selectedNode){
       setSelectedNode(null)
     }
+    if (editingNode){
+      setEditingNode(null)
+    }
+  }
+
+  const handleSaveEdit = (nodeId: string, newText: string) => {
+    if (newText.trim()) {
+      const editedData = treeData.map((node) => (node.id === nodeId) ? ({...node, text: newText}) : (node))
+      setTreeData(editedData)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setEditingNode(null)
   }
 
   return (
@@ -69,6 +87,9 @@ const App = () => {
           rootId={currentRootId}
           selectedNode={selectedNode}
           setSelectedNode={setSelectedNode}
+          editingNode={editingNode}
+          onSaveEdit={handleSaveEdit}
+          onCancelEdit={handleCancelEdit}
           />
         </div>
       </div>
@@ -76,9 +97,8 @@ const App = () => {
       onAdd={handleAdd}
       onEdit={handleEdit}
       onRemove={handleRemove}
-      onReset={handleReset}>
-
-      </TreeControls>
+      onReset={handleReset}
+      />
     </div>
   )
 }

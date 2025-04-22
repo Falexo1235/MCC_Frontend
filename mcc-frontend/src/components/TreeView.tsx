@@ -1,6 +1,6 @@
 import type React from "react"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import type { TreeNode } from "../App"
 
 interface TreeViewProps {
@@ -8,14 +8,21 @@ interface TreeViewProps {
     rootId: string | null
     selectedNode: string | null
     setSelectedNode: (id: string | null) => void
+    editingNode: string | null
+    onSaveEdit: (nodeId: string, newText: string) => void
+    onCancelEdit: () => void
 }
 const TreeView = ({
     data,
     rootId,
     selectedNode,
-    setSelectedNode
+    setSelectedNode,
+    editingNode,
+    onSaveEdit,
+    onCancelEdit
 }: TreeViewProps) => {
     const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set())
+    const [editText, setEditText] = useState<string>("")
 
     const getChildren = (parentId: string | null) => {
         return data.filter((node) => node.parent === parentId)
@@ -29,11 +36,28 @@ const TreeView = ({
         }
         setExpandedNodes(newExpandedNodes)
     }
+
+    const handleStartEdit = (node: TreeNode) => {
+        setEditText(node.text)
+    }
+    const handleNodeClick = (editText: React.MouseEvent, nodeId: string) => {
+        editText.stopPropagation()
+        setSelectedNode(nodeId)
+    }
+    const handleKeyPress = (e: React.KeyboardEvent, nodeId: string) => {
+        if (e.key === "Enter"){
+            onSaveEdit(nodeId, editText)
+        } else if (e.key === "Escape") {
+            onCancelEdit()
+        }
+    }
+
     const renderNode = (node: TreeNode) => {
         const children = getChildren(node.id)
         const hasChildren= children.length > 0
         const isExpanded = expandedNodes.has(node.id)
         const isSelected = selectedNode === node.id
+        const isEditing = editingNode === node.id
         
         return (
             <div key={node.id} className="tree-node-container">
@@ -44,7 +68,19 @@ const TreeView = ({
                         </span>
                     )}
                     {!hasChildren && <span className="toggle-icon-placeholder"></span>}
-                    <span className="node-text">{node.text}</span>
+                    {isEditing ? (<div className="edit-container" onClick={(e) => e.stopPropagation()}>
+                        <input
+                            type="text"
+                            className="edit-input"
+                            value={editText}
+                            onChange={(e) => setEditText(e.target.value)}
+                            onKeyDown={(e) => handleKeyPress(e, node.id)}
+                            onBlur={() => onSaveEdit(node.id, editText)}
+                            autoFocus
+                        />
+                    </div>
+                ) : (
+                <span className="node-text">{node.text}</span>)}
                 </div>
                 {hasChildren && isExpanded && (
                     <div className="children-container">{children.map((child) => renderNode(child))}</div>
