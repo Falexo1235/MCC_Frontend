@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import TreeView from './components/TreeView'
 import initialData from "./data.json"
@@ -12,7 +12,7 @@ export interface TreeNode {
 
 const App = () => {
   const [treeData, setTreeData] = useState<TreeNode[]>(initialData.objects)
-  const [currentRootId, setCurrentRootId] = useState<string | null>(null)
+  const [currentRootId] = useState<string | null>(null)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
   const [editingNode, setEditingNode] = useState<string | null>(null)
   const handleAdd = () => {
@@ -81,7 +81,7 @@ const App = () => {
   return (
     <div className='page-background' onClick={handleDeselect}>
       <div className='app-container' >
-        <h1>Дерево</h1>
+        <h1>Tree</h1>
         <div className='tree-container'>
           <div className='main-tree' onClick={handleDeselect}>
             <TreeView
