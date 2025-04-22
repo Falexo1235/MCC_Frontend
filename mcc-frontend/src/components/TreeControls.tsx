@@ -7,7 +7,7 @@ interface TreeControlsProps {
   
   const TreeControls = ({ onAdd, onRemove, onEdit, onReset }: TreeControlsProps) => {
     return (
-      <div className="tree-controls">
+      <div className="tree-controls" onClick={(e) => {e.stopPropagation()}}>
         <button className="control-button add" onClick={onAdd}>
           Add
         </button>

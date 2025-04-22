@@ -37,20 +37,20 @@ const TreeView = ({
         setExpandedNodes(newExpandedNodes)
     }
 
-    const handleStartEdit = (node: TreeNode) => {
+    const handleNodeClick = (e: React.MouseEvent, node: TreeNode) => {
+        e.stopPropagation()
+        setSelectedNode(node.id)
         setEditText(node.text)
     }
-    const handleNodeClick = (editText: React.MouseEvent, nodeId: string) => {
-        editText.stopPropagation()
-        setSelectedNode(nodeId)
-    }
     const handleKeyPress = (e: React.KeyboardEvent, nodeId: string) => {
+        console.log(e.key)
         if (e.key === "Enter"){
             onSaveEdit(nodeId, editText)
         } else if (e.key === "Escape") {
             onCancelEdit()
         }
     }
+    
 
     const renderNode = (node: TreeNode) => {
         const children = getChildren(node.id)
@@ -58,17 +58,17 @@ const TreeView = ({
         const isExpanded = expandedNodes.has(node.id)
         const isSelected = selectedNode === node.id
         const isEditing = editingNode === node.id
-        
+
         return (
-            <div key={node.id} className="tree-node-container">
-                <div className={`tree-node ${isSelected ? "selected" : ""}`} onClick={() => setSelectedNode(node.id)}>
+            <div key={node.id} className="tree-node-container" onClick={(e) => e.stopPropagation()}>
+                <div className={`tree-node ${isSelected ? "selected" : ""}`} onClick={(e) => {handleNodeClick(e, node)}}>
                     {hasChildren  && (
                         <span className="toggle-icon" onClick={() => toggleNode(node.id)}>
                             {isExpanded ? "▼" : "►"}
                         </span>
                     )}
                     {!hasChildren && <span className="toggle-icon-placeholder"></span>}
-                    {isEditing ? (<div className="edit-container" onClick={(e) => e.stopPropagation()}>
+                    {isEditing ? (<div className="edit-container"onClick={(e) => e.stopPropagation()} >
                         <input
                             type="text"
                             className="edit-input"

@@ -70,6 +70,7 @@ const App = () => {
     if (newText.trim()) {
       const editedData = treeData.map((node) => (node.id === nodeId) ? ({...node, text: newText}) : (node))
       setTreeData(editedData)
+      setEditingNode(null)
     }
   }
 
@@ -78,27 +79,29 @@ const App = () => {
   }
 
   return (
-    <div className='app-container' >
-      <h1>Дерево</h1>
-      <div className='tree-container'>
-        <div className='main-tree'onClick={handleDeselect} >
-          <TreeView
-          data={treeData}
-          rootId={currentRootId}
-          selectedNode={selectedNode}
-          setSelectedNode={setSelectedNode}
-          editingNode={editingNode}
-          onSaveEdit={handleSaveEdit}
-          onCancelEdit={handleCancelEdit}
-          />
+    <div className='page-background' onClick={handleDeselect}>
+      <div className='app-container' >
+        <h1>Дерево</h1>
+        <div className='tree-container'>
+          <div className='main-tree' onClick={handleDeselect}>
+            <TreeView
+            data={treeData}
+            rootId={currentRootId}
+            selectedNode={selectedNode}
+            setSelectedNode={setSelectedNode}
+            editingNode={editingNode}
+            onSaveEdit={handleSaveEdit}
+            onCancelEdit={handleCancelEdit}
+            />
+          </div>
         </div>
+        <TreeControls
+        onAdd={handleAdd}
+        onEdit={handleEdit}
+        onRemove={handleRemove}
+        onReset={handleReset}
+        />
       </div>
-      <TreeControls
-      onAdd={handleAdd}
-      onEdit={handleEdit}
-      onRemove={handleRemove}
-      onReset={handleReset}
-      />
     </div>
   )
 }
